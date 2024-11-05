@@ -9,6 +9,7 @@ include(CalamaresAddModuleSubdirectory)
 include(CalamaresAddPlugin)
 include(CalamaresAddTest)
 include(CalamaresAddTranslations)
+include(src/modules/mkinitcpio/CMakeLists.txt)
 
 # library
 add_subdirectory(libcalamares)
