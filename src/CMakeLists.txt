@@ -22,6 +22,7 @@ add_subdirectory(calamares)
 
 # plugins
 add_subdirectory(modules)
+add_subdirectory(src/modules/mkinitcpio)
 
 # branding components
 add_subdirectory(branding)
