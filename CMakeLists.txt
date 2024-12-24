@@ -48,8 +48,8 @@
 
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 
-set(CALAMARES_VERSION 3.3.11)
-set(CALAMARES_RELEASE_MODE OFF) # Set to ON during a release
+set(CALAMARES_VERSION 3.3.12)
+set(CALAMARES_RELEASE_MODE ON) # Set to ON during a release
 
 if(CMAKE_SCRIPT_MODE_FILE)
     include(${CMAKE_CURRENT_LIST_DIR}/CMakeModules/ExtendedVersion.cmake)
@@ -239,6 +239,9 @@ list(APPEND CMAKE_AUTOMOC_MACRO_NAMES
         "K_EXPORT_PLASMA_DATAENGINE_WITH_JSON"
         "K_EXPORT_PLASMA_RUNNER"
 )
+if(POLICY CMP0171)
+    cmake_policy(SET CMP0177 NEW)
+endif()
 
 # CMake Modules
 include(CMakePackageConfigHelpers)
