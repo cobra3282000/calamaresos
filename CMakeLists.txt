@@ -48,8 +48,8 @@
 
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 
-set(CALAMARES_VERSION 3.3.12)
-set(CALAMARES_RELEASE_MODE ON) # Set to ON during a release
+set(CALAMARES_VERSION 3.3.15)
+set(CALAMARES_RELEASE_MODE OFF) # Set to ON during a release
 
 if(CMAKE_SCRIPT_MODE_FILE)
     include(${CMAKE_CURRENT_LIST_DIR}/CMakeModules/ExtendedVersion.cmake)
@@ -92,6 +92,8 @@ option(WITH_QT6 "Use Qt6 instead of Qt5" OFF)
 option(BUILD_SCHEMA_TESTING "Enable schema-validation-tests" ON)
 # Options for the calamares executable
 option(BUILD_CRASH_REPORTING "Enable crash reporting with KCrash." ON)
+
+option(DEBUG_SANITIZERS "Enable sanitizers and Debug build type" OFF)
 
 # Possible debugging flags are:
 #  - DEBUG_TIMEZONES draws latitude and longitude lines on the timezone
@@ -272,6 +274,9 @@ set(CMAKE_C_FLAGS_RELWITHDEBINFO "-O2 -g")
 set(CMAKE_SHARED_LINKER_FLAGS "-Wl,--no-undefined -Wl,--fatal-warnings ${CMAKE_SHARED_LINKER_FLAGS}")
 
 # If no build type is set, pick a reasonable one
+if(DEBUG_SANITIZERS)
+    set(CMAKE_BUILD_TYPE DEBUG)
+endif()
 if(NOT CMAKE_BUILD_TYPE)
     if(CALAMARES_RELEASE_MODE)
         set(CMAKE_BUILD_TYPE "RelWithDebInfo")
@@ -337,6 +342,10 @@ if(CMAKE_COMPILER_IS_GNUCXX)
     if(CMAKE_CXX_COMPILER_VERSION VERSION_GREATER 4.9 OR CMAKE_CXX_COMPILER_VERSION VERSION_EQUAL 4.9)
         message(STATUS "Found GNU g++ ${CMAKE_CXX_COMPILER_VERSION}, enabling colorized error messages.")
         set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fdiagnostics-color=auto")
+    endif()
+    if(DEBUG_SANITIZERS)
+        message(STATUS "Setting up sanitizers")
+        set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=undefined -fsanitize=address -g -O1")
     endif()
 endif()
 
